@@ -19,16 +19,11 @@
                 weight--;
             }
 
-            int checkDigit = result % 11;
+            int checkDigit = 11 - (result % 11);
 
-            if (checkDigit == 10)
-            {
-                Console.WriteLine(isbnInput + "X");
-            }
-            else
-            {
-                Console.WriteLine(isbnInput + checkDigit.ToString());
-            }
+            string isbn = isbnInput + (checkDigit == 10 ? "X" : checkDigit.ToString());
+
+            Console.WriteLine(isbn);
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();

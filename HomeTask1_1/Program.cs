@@ -15,35 +15,34 @@
             int firstNumber = int.Parse(firstNumberInput);
             int secondNumber = int.Parse(secondNumberInput);
 
+            if(firstNumber > secondNumber)
+            {
+                int temp = firstNumber;
+                firstNumber = secondNumber;
+                secondNumber = temp;
+            }
+
             for (int i = firstNumber; i <= secondNumber; i++)
             {
-                string calculateValue = "";
-                int currentValue = i;
+                int currentValue = Math.Abs(i);
                 int count = 0;
 
                 while (currentValue > 0)
                 {
                     int remainder = currentValue % 12;
 
-                    calculateValue = Digits[remainder] + calculateValue;
-                    currentValue /= 12;
-                }
-
-                for (int j = 0; j < calculateValue.Length; j++)
-                {
-                    if (calculateValue[j] == 'A')
+                    if (Digits[remainder] == 'A')
                     {
                         count++;
-                    }
+                    } 
+
+                    currentValue /= 12;
                 }
 
                 if (count == 2)
                 {
                     Console.WriteLine(i);
                 }
-
-                count = 0;
-                calculateValue = "";
             }
 
             Console.WriteLine("Press any key to exit...");

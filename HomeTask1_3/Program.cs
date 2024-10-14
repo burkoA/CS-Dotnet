@@ -41,10 +41,7 @@
             }
 
             int[] finalUnique = new int[uniqueCount];
-            for (int i = 0; i < uniqueCount; i++)
-            {
-                finalUnique[i] = unique[i];
-            }
+            Array.Copy(unique, finalUnique, uniqueCount);
 
             Console.WriteLine(string.Join(", ", numbers));
             Console.WriteLine(string.Join(", ", finalUnique));
