@@ -19,7 +19,7 @@
                 weight--;
             }
 
-            int checkDigit = 11 - (result % 11);
+            int checkDigit = (11 - (result % 11)) % 11;
 
             string isbn = isbnInput + (checkDigit == 10 ? "X" : checkDigit.ToString());
 
