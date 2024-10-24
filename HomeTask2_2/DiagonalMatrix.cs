@@ -12,7 +12,7 @@ public class DiagonalMatrix
         if (diagonalElement == null)
         {
             Size = 0;
-            _diagonalElement = new int[0];
+            _diagonalElement = new int[Size];
         }
         else
         {
@@ -26,19 +26,27 @@ public class DiagonalMatrix
     {
         get
         {
-            if (i >= Size || j >= Size || i < 0 || j < 0)
+            if (IsValidIndexes(i, j))
             {
-                return 0;
+                return _diagonalElement[i];
             }
-            return (i == j) ? _diagonalElement[i] : 0;
+            return 0;
         }
         set
         {
-            if (i >= 0 && i < Size && j >= 0 && j < Size)
+            if (IsValidIndexes(i, j))
             {
                 _diagonalElement[i] = value;
             }
         }
+    }
+
+    private bool IsValidIndexes(int i, int j)
+    {
+        if (i >= 0 && i < Size && j >= 0 && j < Size && i == j)
+            return true;
+
+        return false;
     }
 
     public int Track()
@@ -55,13 +63,10 @@ public class DiagonalMatrix
 
     public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
+        if (!(obj is DiagonalMatrix m) || Size != m.Size)
             return false;
 
-        DiagonalMatrix otherDiagonal = (DiagonalMatrix)obj;
-
-        if (Size != otherDiagonal.Size)
-            return false;
+        DiagonalMatrix otherDiagonal = obj as DiagonalMatrix;
 
         for (int i = 0; i < Size; i++)
         {
@@ -80,49 +85,29 @@ public class DiagonalMatrix
         {
             for (int j = 0; j < Size; j++)
             {
-                if (i == j)
-                {
-                    result += _diagonalElement[i];
-                }
-                else
-                {
-                    result += "0";
-                }
+                result += this[i, j];
             }
+
             result += "\n";
         }
 
         return result;
     }
+}
 
-    public static DiagonalMatrix SumTwoMatrix(DiagonalMatrix firstMatrix, DiagonalMatrix secondMatrix)
+public static class AddMatrices
+{
+    public static DiagonalMatrix Add(this DiagonalMatrix firstMatrix, DiagonalMatrix secondMatrix)
     {
-        int newSize = Math.Max(firstMatrix.Size, secondMatrix.Size);
+        int newSize = Math.Max(firstMatrix._diagonalElement.Length, secondMatrix._diagonalElement.Length);
 
         int[] resultElements = new int[newSize];
 
-        int firstMatrixElement = 0;
-        int secondMatrixElement = 0;
-
         for (int i = 0; i < newSize; i++)
         {
-            if (i < firstMatrix.Size)
-            {
-                firstMatrixElement = firstMatrix._diagonalElement[i];
-            }
-            else
-            {
-                firstMatrixElement = 0;
-            }
+            int firstMatrixElement = i < firstMatrix._diagonalElement.Length ? firstMatrix._diagonalElement[i] : 0;
 
-            if (i < secondMatrix.Size)
-            {
-                secondMatrixElement = secondMatrix._diagonalElement[i];
-            }
-            else
-            {
-                secondMatrixElement = 0;
-            }
+            int secondMatrixElement = i < secondMatrix._diagonalElement.Length ? secondMatrix._diagonalElement[i] : 0;
 
             resultElements[i] = firstMatrixElement + secondMatrixElement;
         }

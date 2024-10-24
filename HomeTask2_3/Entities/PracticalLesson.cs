@@ -1,6 +1,6 @@
 ﻿namespace HomeTask2_3.Entities
 {
-    internal class PracticalLesson : TrainingElement
+    internal class PracticalLesson : Lesson
     {
         public string? LinkToTask { get; set; }
         public string? LinkToSolution { get; set; }
@@ -9,6 +9,11 @@
         {
             LinkToTask = linkToTask;
             LinkToSolution = linkToSolution;
+        }
+
+        public override Lesson Clone()
+        {
+            return new PracticalLesson(this.Description, this.LinkToTask, this.LinkToSolution);
         }
     }
 }

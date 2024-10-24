@@ -1,22 +1,19 @@
 ﻿namespace HomeTask2_3.Entities
 {
-    internal class Training
+    internal class Training : TrainingElement
     {
-        public string? Description { get; set; }
-
-        private TrainingElement[] trainingElements;
+        private Lesson[] trainingElements;
         private int _itemCount;
 
-        public Training(string? description)
+        public Training(string? description) : base(description)
         {
-            Description = description;
-            trainingElements = new TrainingElement[10];
+            trainingElements = new Lesson[10];
             _itemCount = 0;
         }
 
-        public void Add(TrainingElement item)
+        public void Add(Lesson item)
         {
-            if(_itemCount == trainingElements.Length)
+            if (_itemCount == trainingElements.Length)
             {
                 Array.Resize(ref trainingElements, _itemCount * 2);
             }
@@ -29,7 +26,7 @@
         {
             for (int i = 0; i < _itemCount; i++)
             {
-                if (trainingElements[i] is Lecture)
+                if (!(trainingElements[i] is PracticalLesson))
                 {
                     return false;
                 }
@@ -43,14 +40,7 @@
 
             for (int i = 0; i < _itemCount; i++)
             {
-                if (trainingElements[i] is Lecture lecture)
-                {
-                    clone.Add(new Lecture(lecture.Description, lecture.Topic));
-                }
-                else if (trainingElements[i] is PracticalLesson lesson)
-                {
-                    clone.Add(new PracticalLesson(lesson.Description, lesson.LinkToTask, lesson.LinkToSolution));
-                }
+                clone.Add(trainingElements[i].Clone());
             }
 
             return clone;

@@ -8,8 +8,8 @@ class Program
     {
         Training training = new Training("C# Advanced Training");
 
-        PracticalLesson practical1 = new PracticalLesson("Practice 1", "task1_link", "solution1_link");
-        PracticalLesson practical2 = new PracticalLesson("Practice 2", "task2_link", "solution2_link");
+        Lesson practical1 = new PracticalLesson("Practice 1", "task1_link", "solution1_link");
+        Lesson practical2 = new PracticalLesson("Practice 2", "task2_link", "solution2_link");
         training.Add(practical1);
         training.Add(practical2);
 
@@ -20,7 +20,7 @@ class Program
         Training clonedTraining = training.Clone();
         Console.WriteLine($"Training cloned. Original description: {training.Description}, Clone description: {clonedTraining.Description}");
 
-        Lecture lecture3 = new Lecture("Delegates and Events", "Advanced Delegates");
+        Lesson lecture3 = new Lecture("Delegates and Events", "Advanced Delegates");
         training.Add(lecture3);
 
         // Check difference between training
