@@ -16,13 +16,15 @@ namespace HomeTask3
             _queue.AddLast(element);
         }
 
-        public void Dequeue()
+        public T Dequeue()
         {
-            try
+            if (!IsEmpty())
             {
+                T value = _queue.First.Value;
                 _queue.RemoveFirst();
-            } 
-            catch
+                return value;
+            }
+            else
             {
                 throw new Exception("List is empty");
             }
@@ -30,24 +32,12 @@ namespace HomeTask3
 
         public bool IsEmpty()
         {
-            if(_queue == null || _queue.Count == 0)
+            if (_queue.Count == 0)
             {
                 return true;
             }
 
             return false;
-        }
-
-        public Queue<T> SetValue()
-        {
-            Queue<T> setValue = new Queue<T>();
-
-            foreach(T value in this._queue)
-            {
-                setValue.Enqueue(value);
-            }
-
-            return setValue;
         }
     }
 }

@@ -7,19 +7,32 @@ namespace HomeTask3
         public static IQueue<T> Tail<T>(this Queue<T> queue) where T : struct
         {
             Queue<T> newQueue = new Queue<T>();
+            Queue<T> oldQueue = new Queue<T>();
 
-            try
+            if (queue.IsEmpty())
             {
-                newQueue = queue.SetValue();
-                newQueue.Dequeue();
+                newQueue.Enqueue(default);
                 return newQueue;
             }
-            catch
+
+            T value = queue.Dequeue();
+
+            oldQueue.Enqueue(value);
+
+            while (!queue.IsEmpty())
             {
-                Console.WriteLine("The list is empty");
-                newQueue.Enqueue(default(T));
-                return newQueue;
+                value = queue.Dequeue();
+                oldQueue.Enqueue(value);
+                newQueue.Enqueue(value);
             }
+
+            while (!oldQueue.IsEmpty())
+            {
+                value = oldQueue.Dequeue();
+                queue.Enqueue(value);
+            }
+
+            return newQueue;
         }
     }
 }
