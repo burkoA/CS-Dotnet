@@ -8,7 +8,7 @@
 
         public RationalNumber(int numerator, int denominator)
         {
-            if (denominator == 0)
+            if (denominator <= 0)
             {
                 throw new Exception("Denominator cannot be null!");
             }
