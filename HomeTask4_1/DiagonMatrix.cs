@@ -1,4 +1,5 @@
 ﻿using HomeTask4_1.Events;
+using System.Text;
 
 namespace HomeTask4_1
 {
@@ -40,7 +41,12 @@ namespace HomeTask4_1
             }
             set
             {
-                if (IsValidIndexes(i, j) && i == j)
+                if (!IsValidIndexes(i, j))
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                if (i == j)
                 {
                     if (!Equals(_diagonalElement[i], value))
                     {
@@ -48,13 +54,9 @@ namespace HomeTask4_1
                         _diagonalElement[i] = value;
                     }
                 }
-                else if (IsValidIndexes(i, j))
-                {
-                    _diagonalElement[i] = default;
-                }
                 else
                 {
-                    throw new IndexOutOfRangeException();
+                    throw new InvalidOperationException("Cannot set a non-diagonal element in a diagonal matrix.");
                 }
             }
         }
@@ -66,29 +68,23 @@ namespace HomeTask4_1
             ElementChanged?.Invoke(this, element);
         }
 
-        private bool IsValidIndexes(int i, int j)
-        {
-            if (i >= 0 && i < Size && j >= 0 && j < Size)
-                return true;
-
-            return false;
-        }
+        private bool IsValidIndexes(int i, int j) => i >= 0 && i < Size && j >= 0 && j < Size;
 
         public override string ToString()
         {
-            string result = "";
+            StringBuilder result = new StringBuilder();
 
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
                 {
-                    result += this[i, j];
+                    result.Append(this[i, j]);
                 }
 
-                result += "\n";
+                result.Append("\n");
             }
 
-            return result;
+            return result.ToString();
         }
     }
 }

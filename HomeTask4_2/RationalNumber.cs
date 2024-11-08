@@ -13,6 +13,12 @@
                 throw new Exception("Denominator cannot be null!");
             }
 
+            if (denominator < 0)
+            {
+                numerator = -numerator;
+                denominator = -denominator;
+            }
+
             ReduceFraction(ref numerator, ref denominator);
             _numerator = numerator;
             _denominator = denominator;
@@ -24,12 +30,6 @@
 
             number /= gcd;
             denominator /= gcd;
-
-            if(denominator < 0)
-            {
-                number = -number;
-                denominator = -denominator;
-            }
         }
 
         private int GCD(int a, int b)
@@ -41,7 +41,7 @@
                 a = temp;
             }
 
-            return a;
+            return Math.Abs(a);
         }
 
         public override string ToString()
@@ -49,20 +49,10 @@
             return $"{_numerator}/{_denominator}";
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (!(obj is RationalNumber rationlNumber))
-                return false;
+        public override bool Equals(object? obj) => obj is RationalNumber rationlNumber ?
+            rationlNumber._numerator == _numerator && rationlNumber._denominator == _denominator : false;
 
-            RationalNumber otherRational = obj as RationalNumber;
 
-            if (otherRational._numerator != _numerator || otherRational._denominator != _denominator)
-            {
-                return false;
-            }
-
-            return true;
-        }
 
         public int CompareTo(object? obj)
         {
@@ -76,7 +66,7 @@
 
         public static RationalNumber operator +(RationalNumber firstNumber, RationalNumber secondNumber)
         {
-            int numerator = firstNumber._numerator * secondNumber._denominator + 
+            int numerator = firstNumber._numerator * secondNumber._denominator +
                 secondNumber._numerator * firstNumber._denominator;
 
             int denominator = firstNumber._denominator * secondNumber._denominator;
@@ -92,11 +82,16 @@
 
         public static RationalNumber operator *(RationalNumber firstNumber, RationalNumber secondNumber)
         {
-            return new RationalNumber(firstNumber._numerator * secondNumber._numerator,firstNumber._denominator * secondNumber._denominator);
+            return new RationalNumber(firstNumber._numerator * secondNumber._numerator, firstNumber._denominator * secondNumber._denominator);
         }
 
         public static RationalNumber operator /(RationalNumber firstNumber, RationalNumber secondNumber)
         {
+            if (secondNumber._numerator == 0 || secondNumber == null)
+            {
+                throw new Exception("Cannot be equal to zero");
+            }
+
             return new RationalNumber(firstNumber._numerator * secondNumber._denominator, firstNumber._denominator * secondNumber._numerator);
         }
 
