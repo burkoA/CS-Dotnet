@@ -5,8 +5,8 @@
         static void Main(string[] args)
         {
             // Create two DiagonalMatrix instances
-            var matrix1 = new DiagonalMatrix<int>(3, 1, 2, 3);
-            var matrix2 = new DiagonalMatrix<int>(3, 4, 5, 6);
+            var matrix1 = new DiagonalMatrix<int>(3);
+            var matrix2 = new DiagonalMatrix<int>(3);
 
             // Define the addition function
             Func<int, int, int> addFunc = (a, b) => a + b;

@@ -5,28 +5,21 @@ namespace HomeTask4_1
 {
     public class DiagonalMatrix<T>
     {
-        public T[] _diagonalElement;
+        private T[] _diagonalElements;
+
+        public event EventHandler<ElementChangedEventArgs<T>> ElementChanged;
 
         public int Size { get; }
 
-        public DiagonalMatrix(int size, params T[] diagonalElement)
+        public DiagonalMatrix(int size)
         {
-            if(size < 0)
+            if (size < 0)
             {
                 throw new ArgumentException("Size cannot be negative");
             }
 
-            if (diagonalElement == null)
-            {
-                Size = size;
-                _diagonalElement = new T[Size];
-            }
-            else
-            {
-                Size = size;
-                _diagonalElement = new T[Size];
-                Array.Copy(diagonalElement, _diagonalElement, Size);
-            }
+            Size = size;
+            _diagonalElements = new T[Size];
         }
 
         public T this[int i, int j]
@@ -35,33 +28,35 @@ namespace HomeTask4_1
             {
                 if (IsValidIndexes(i, j))
                 {
-                    return i == j ? _diagonalElement[i] : default;
+                    return i == j ? _diagonalElements[i] : default;
                 }
                 throw new IndexOutOfRangeException();
             }
             set
             {
-                if (!IsValidIndexes(i, j))
+                if (IsValidIndexes(i, j) && i == j)
                 {
-                    throw new IndexOutOfRangeException();
-                }
-
-                if (i == j)
-                {
-                    if (!Equals(_diagonalElement[i], value))
+                    if (!Equals(_diagonalElements[i], value))
                     {
-                        OnElementChanged(new ElementChangedEventArgs<T>(_diagonalElement[i], value, i));
-                        _diagonalElement[i] = value;
+                        OnElementChanged(new ElementChangedEventArgs<T>(_diagonalElements[i], value, i));
+                        _diagonalElements[i] = value;
                     }
                 }
                 else
                 {
-                    throw new InvalidOperationException("Cannot set a non-diagonal element in a diagonal matrix.");
+                    throw new IndexOutOfRangeException();
                 }
             }
         }
 
-        public event EventHandler<ElementChangedEventArgs<T>> ElementChanged;
+        public T GetElement(int index)
+        {
+            if (index < 0 || index >= Size)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            return _diagonalElements[index];
+        }
 
         public virtual void OnElementChanged(ElementChangedEventArgs<T> element)
         {
@@ -81,7 +76,7 @@ namespace HomeTask4_1
                     result.Append(this[i, j]);
                 }
 
-                result.Append("\n");
+                result.AppendLine();
             }
 
             return result.ToString();

@@ -8,20 +8,20 @@
 
         public RationalNumber(int numerator, int denominator)
         {
-            if (denominator <= 0)
+            if (denominator == 0)
             {
                 throw new Exception("Denominator cannot be null!");
-            }
-
-            if (denominator < 0)
-            {
-                numerator = -numerator;
-                denominator = -denominator;
             }
 
             ReduceFraction(ref numerator, ref denominator);
             _numerator = numerator;
             _denominator = denominator;
+
+            if (_denominator < 0)
+            {
+                _numerator = -_numerator;
+                _denominator = -_denominator;
+            }
         }
 
         private void ReduceFraction(ref int number, ref int denominator)
@@ -49,8 +49,9 @@
             return $"{_numerator}/{_denominator}";
         }
 
-        public override bool Equals(object? obj) => obj is RationalNumber rationlNumber ?
-            rationlNumber._numerator == _numerator && rationlNumber._denominator == _denominator : false;
+        public override bool Equals(object? obj) =>
+        obj is RationalNumber rationlNumber ?
+        rationlNumber._numerator == _numerator && rationlNumber._denominator == _denominator : false;
 
 
 
@@ -87,7 +88,7 @@
 
         public static RationalNumber operator /(RationalNumber firstNumber, RationalNumber secondNumber)
         {
-            if (secondNumber._numerator == 0 || secondNumber == null)
+            if (secondNumber._denominator == 0 || secondNumber == null)
             {
                 throw new Exception("Cannot be equal to zero");
             }
