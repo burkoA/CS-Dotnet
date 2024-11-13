@@ -1,28 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using HomeTask5_2.Entities;
 
 namespace HomeTask5_2
 {
     public class Catalog
     {
         private Dictionary<string, Book> _catalog;
-        private static Regex isbnForm = new Regex(@"^\d{3}-\d-\d{2}-\d{6}-\d$");
+
         public Catalog()
         {
             _catalog = new Dictionary<string, Book>();
         }
 
-        public void AddBook(string isbn, Book book)
+        public void AddBook(Isbn isbn, Book book)
         {
             if (book == null)
                 throw new Exception("Book cannot be null!");
 
-            if (!isbnForm.IsMatch(isbn) || string.IsNullOrWhiteSpace(isbn))
-                throw new ArgumentException("Invalid format");
-
-
-            string normalIsbn = NormalizeISBN(isbn);
+            string normalIsbn = Isbn.NormalizeISBN(isbn.ISBN);
 
             if (_catalog.ContainsKey(normalIsbn))
                 throw new Exception("This ISBN is already in use");
@@ -32,17 +26,12 @@ namespace HomeTask5_2
 
         public Book GetBookByISBN(string isbn)
         {
-            string normalIsbn = NormalizeISBN(isbn);
+            string normalIsbn = Isbn.NormalizeISBN(isbn);
 
             return _catalog.TryGetValue(normalIsbn, out Book book) ? book : null;
         }
 
-        private string NormalizeISBN(string isbn)
-        {
-            return isbn.Replace("-", "");
-        }
-
-        public List<(string,Book)> SetOfBookBySortedAlphabetically() => 
+        public List<(string, Book)> SetOfBookBySortedAlphabetically() =>
             _catalog.OrderBy(b => b.Value.Title)
             .Select(b => (b.Key, b.Value))
             .ToList();
@@ -50,7 +39,7 @@ namespace HomeTask5_2
 
         public List<(string, Book)> RetriveBookByAuthorAndSorted(string author)
         {
-            if(string.IsNullOrWhiteSpace(author))
+            if (string.IsNullOrWhiteSpace(author))
             {
                 throw new ArgumentException("Author cannot be null");
             }

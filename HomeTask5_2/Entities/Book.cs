@@ -1,4 +1,4 @@
-﻿namespace HomeTask5_2
+﻿namespace HomeTask5_2.Entities
 {
     public class Book
     {
@@ -10,7 +10,7 @@
         {
             if (string.IsNullOrEmpty(title))
             {
-                throw new ArgumentException("Title cannot be null!");
+                throw new ArgumentException("Title cannot be null or empty!");
             }
 
             Title = title;
