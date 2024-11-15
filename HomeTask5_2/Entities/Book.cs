@@ -2,9 +2,9 @@
 {
     public class Book
     {
-        public string Title { get; set; }
-        public DateTime? PublicationDate { get; set; }
-        public HashSet<string>? Authors { get; set; }
+        public string Title { get; }
+        public DateTime? PublicationDate { get; }
+        public HashSet<string>? Authors { get; }
 
         public Book(string title, DateTime? publicationDate, HashSet<string>? authors)
         {

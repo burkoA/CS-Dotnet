@@ -11,12 +11,15 @@ namespace HomeTask5_2
             _catalog = new Dictionary<string, Book>();
         }
 
-        public void AddBook(Isbn isbn, Book book)
+        public void AddBook(string isbn, Book book)
         {
             if (book == null)
                 throw new Exception("Book cannot be null!");
 
-            string normalIsbn = Isbn.NormalizeISBN(isbn.ISBN);
+            if (!Isbn.IsValidIsbn(isbn))
+                throw new Exception("Valid format isbn!");
+
+            string normalIsbn = Isbn.NormalizeISBN(isbn);
 
             if (_catalog.ContainsKey(normalIsbn))
                 throw new Exception("This ISBN is already in use");
@@ -31,22 +34,19 @@ namespace HomeTask5_2
             return _catalog.TryGetValue(normalIsbn, out Book book) ? book : null;
         }
 
-        public List<(string, Book)> SetOfBookBySortedAlphabetically() =>
-            _catalog.OrderBy(b => b.Value.Title)
-            .Select(b => (b.Key, b.Value))
-            .ToList();
+        public IEnumerable<string> SetOfBookBySortedAlphabetically() =>
+            _catalog.OrderBy(b => b.Value.Title).Select(t => t.Value.Title);
 
 
-        public List<(string, Book)> RetriveBookByAuthorAndSorted(string author)
+        public IEnumerable<Book> RetriveBookByAuthorAndSorted(string author)
         {
             if (string.IsNullOrWhiteSpace(author))
-            {
                 throw new ArgumentException("Author cannot be null");
-            }
 
-            var result = _catalog.Where(a => a.Value.Authors.Contains(author)).OrderBy(d => d.Value.PublicationDate).Select(a => (a.Key, a.Value)).ToList();
 
-            return result;
+            return _catalog.Where(b => b.Value.Authors.Contains(author))
+                .Select(b => b.Value)
+                .OrderBy(p => p.PublicationDate);
         }
 
         public List<(string, int)> RetriveAuthorAndBook() =>

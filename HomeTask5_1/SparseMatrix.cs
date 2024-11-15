@@ -1,18 +1,18 @@
-﻿using System.Text;
-using System.Collections;
+﻿using System.Collections;
+using System.Text;
 
 namespace HomeTask5_1
 {
     public class SparseMatrix : IEnumerable<long>
     {
-        private Dictionary<(int,int),long> _sparseMatrix;
+        private Dictionary<(int, int), long> _sparseMatrix;
 
         private int _rows;
         private int _cols;
 
         public SparseMatrix(int rows, int columns)
         {
-            if(rows <= 0 || columns <= 0)
+            if (rows <= 0 || columns <= 0)
             {
                 throw new ArgumentException("Size cannot be <= 0");
             }
@@ -43,13 +43,13 @@ namespace HomeTask5_1
                     throw new IndexOutOfRangeException("Out of range");
                 }
 
-                if(value == 0)
+                if (value == 0)
                 {
                     _sparseMatrix.Remove((i, j));
                 }
                 else
                 {
-                    _sparseMatrix[(i,j)] = value;
+                    _sparseMatrix[(i, j)] = value;
                 }
             }
         }
@@ -58,11 +58,11 @@ namespace HomeTask5_1
         {
             StringBuilder result = new StringBuilder();
 
-            for(int i = 0; i < _rows; i++)
+            for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _cols; j++)
                 {
-                    result.Append(this[i,j]);
+                    result.Append(this[i, j]);
                 }
                 result.AppendLine();
             }
@@ -72,17 +72,13 @@ namespace HomeTask5_1
 
         public IEnumerator GetEnumerator()
         {
-            List<long> elements = new List<long>();
-
             for (int i = 0; i < _rows; i++)
             {
                 for (int j = 0; j < _cols; j++)
                 {
-                    elements.Add(this[i,j]);
+                    yield return this[i, j];
                 }
             }
-
-            return elements.GetEnumerator();
         }
 
         IEnumerator<long> IEnumerable<long>.GetEnumerator()
@@ -90,18 +86,11 @@ namespace HomeTask5_1
             return (IEnumerator<long>)GetEnumerator();
         }
 
-        public IEnumerable<(int, int, long)> GetNonzeroElements() => 
+        public IEnumerable<(int, int, long)> GetNonzeroElements() =>
             _sparseMatrix.OrderBy(c => c.Key.Item2).ThenBy(r => r.Key.Item1).Select(e => (e.Key.Item1, e.Key.Item2, e.Value));
 
 
-        public int GetCount(long value)
-        {
-            if(value == 0)
-            {
-                return _rows * _cols - _sparseMatrix.Count;
-            }
-
-            return _sparseMatrix.Count(v => v.Value == value);
-        }
+        public int GetCount(long value) =>
+            value == 0 ? _rows * _cols - _sparseMatrix.Count : _sparseMatrix.Count(v => v.Value == value);
     }
 }
