@@ -1,16 +1,10 @@
 ﻿using HomeTask6.Entities;
-using HomeTask6.Interfaces;
-using HomeTask6.Repositories;
-using System.Xml.Serialization;
 
 namespace HomeTask6
 {
     public class Catalog 
     {
         public Dictionary<string, Book> _catalog { get; }
-
-        private IRepository<Catalog> repositotyXML = new XMLRepository();
-        private IRepository<Catalog> reposityoryJSON = new JSONRepository();
 
         public Catalog() 
         {
@@ -61,19 +55,5 @@ namespace HomeTask6
                 .GroupBy(author => $"{author.FirstName} {author.LastName}")
                 .Select(g => (g.Key, g.Count()))
                 .ToList();
-
-        public void SaveCatalog() =>
-            repositotyXML.Save(this);
-
-
-        public Catalog LoadCatalog() => 
-            repositotyXML.Load();
-
-        public void SaveBookByAuthor() =>
-            reposityoryJSON.Save(this);
-        
-
-        public Catalog LoadBookByAuthor() =>
-            reposityoryJSON.Load();
     }
 }

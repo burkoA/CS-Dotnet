@@ -1,10 +1,6 @@
-﻿using HomeTask6.DALEntities;
-using HomeTask6.Entities;
+﻿using HomeTask6.Entities;
 using HomeTask6.Interfaces;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Xml;
 
 namespace HomeTask6.Repositories
 {

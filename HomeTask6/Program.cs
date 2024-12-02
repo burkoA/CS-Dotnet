@@ -1,4 +1,6 @@
 ﻿using HomeTask6.Entities;
+using HomeTask6.Interfaces;
+using HomeTask6.Repositories;
 
 namespace HomeTask6
 {
@@ -6,6 +8,9 @@ namespace HomeTask6
     {
         static void Main(string[] args)
         {
+            IRepository<Catalog> repositotyXML = new XMLRepository();
+            IRepository<Catalog> reposityoryJSON = new JSONRepository();
+
             //Author create
 
             Author author1 = new Author("John Ronald Reuel", "Tolkien", new DateTime(1892, 1, 3));
@@ -39,21 +44,21 @@ namespace HomeTask6
 
             var test = catalog1.RetriveAuthorAndBook();
 
-            catalog1.SaveCatalog();
+            repositotyXML.Save(catalog1);
 
-            var catalog2 = catalog1.LoadCatalog();
+            var catalog2 = repositotyXML.Load();
 
             Book book8 = new Book("Test", DateTime.Now, new HashSet<Author> { author1, author1 });
 
             catalog1.AddBook("978-0-14-241036-7", book8);
 
-            catalog1.SaveCatalog();
+            repositotyXML.Save(catalog1);
 
-            catalog2 = catalog1.LoadCatalog();
+            catalog2 = repositotyXML.Load();
 
-            catalog1.SaveBookByAuthor();
+            reposityoryJSON.Save(catalog2);
 
-            Catalog catalog3 = catalog1.LoadBookByAuthor();
+            Catalog catalog3 = reposityoryJSON.Load();
         }
     }
 }
