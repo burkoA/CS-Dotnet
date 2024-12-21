@@ -1,6 +1,7 @@
 ﻿using HomeTask7.Entities.BookType;
-using HomeTask7.Entities;
 using System.Xml.Serialization;
+using HomeTask7.Entities.BookEntities;
+using HomeTask7.Utilities;
 
 namespace HomeTask7.DALEntities
 {
@@ -38,22 +39,9 @@ namespace HomeTask7.DALEntities
 
             foreach (var (key, dalBook) in Books)
             {
-                Book book;
+                Book book = null;
 
-                if (dalBook.Authors?.Any() == true && dalBook.Authors.Count > 1)
-                {
-                    book = new EBook(
-                        dalBook.Title,
-                        dalBook.Authors?.Select(a => new Author(
-                            a.FirstName,
-                            a.LastName,
-                            a.Birthday
-                        )).ToHashSet() ?? new HashSet<Author>(),
-                        "uploadSource",
-                        new List<string>()
-                    );
-                }
-                else
+                if (KeyValidator.CheckForIsbn(key))
                 {
                     book = new PaperBook(
                         dalBook.Title,
@@ -65,6 +53,19 @@ namespace HomeTask7.DALEntities
                         DateTime.Now,
                         new List<string>(),
                         "PublisherName"
+                    );
+                }
+                else if (KeyValidator.CheckForLink(key))
+                {
+                    book = new EBook(
+                        dalBook.Title,
+                        dalBook.Authors?.Select(a => new Author(
+                            a.FirstName,
+                            a.LastName,
+                            a.Birthday
+                        )).ToHashSet() ?? new HashSet<Author>(),
+                        "uploadSource",
+                        new List<string>()
                     );
                 }
 

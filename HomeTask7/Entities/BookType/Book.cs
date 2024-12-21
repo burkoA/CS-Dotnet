@@ -1,4 +1,6 @@
-﻿namespace HomeTask7.Entities.BookType
+﻿using HomeTask7.Entities.BookEntities;
+
+namespace HomeTask7.Entities.BookType
 {
     public abstract class Book
     {

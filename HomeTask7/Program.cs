@@ -1,37 +1,50 @@
 ﻿using HomeTask7.Entities;
 using HomeTask7.Entities.AbstractFactory;
+using HomeTask7.Entities.BookEntities;
 using HomeTask7.Interfaces;
 using HomeTask7.Repositories;
 
 namespace HomeTask7
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             IRepository<Catalog> repositoryXML = new XMLRepository();
             IRepository<Catalog> repositoryJSON = new JSONRepository();
 
-            string csvFilePath = "./Resources/books_info.csv";
+            Library libraryTwo = new Library();
+            Library libraryOne = new Library();
+
+            // Paper Library
 
             ILibraryFactory paperBookFactory = new PaperBookLibraryFactory();
-            Library paperBookLibrary = paperBookFactory.CreateLibrary(csvFilePath);
+            Library paperLibrary = new Library();
 
+            paperLibrary.Catalog = paperBookFactory.CreateCatalog();
+            paperLibrary.PressReleaseItems = paperBookFactory.CreatePressRelease();
 
-            ILibraryFactory eBookFactory = new EBookLibraryFactory();
-            Library eBookLibrary = eBookFactory.CreateLibrary(csvFilePath);
-
-
-
-            repositoryXML.Save(paperBookLibrary.Catalog);
-
-            Library libraryOne = new Library();
+            repositoryXML.Save(paperLibrary.Catalog);
             libraryOne.Catalog = repositoryXML.Load();
 
-            repositoryJSON.Save(eBookLibrary.Catalog);
-
-            Library libraryTwo = new Library();
+            repositoryJSON.Save(paperLibrary.Catalog);
             libraryTwo.Catalog = repositoryJSON.Load();
+
+            //Electronic Library
+
+            ILibraryFactory eBookFactory = new EBookLibraryFactory();
+            Library eBookLibrary = new Library();
+
+            eBookLibrary.Catalog = eBookFactory.CreateCatalog();
+            eBookLibrary.PressReleaseItems = eBookFactory.CreatePressRelease();
+
+            // Load and Save
+
+            //repositoryXML.Save(eBookLibrary.Catalog);
+            //libraryOne.Catalog = repositoryXML.Load();
+
+            //repositoryJSON.Save(eBookLibrary.Catalog);
+            //libraryTwo.Catalog = repositoryJSON.Load();
 
         }
     }

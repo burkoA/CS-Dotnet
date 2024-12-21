@@ -1,7 +1,8 @@
 ﻿using HomeTask7.Entities.BookType;
-using HomeTask7.Entities;
 using HomeTask7.Interfaces;
 using System.Text.Json;
+using HomeTask7.Entities.BookEntities;
+using HomeTask7.Utilities;
 
 namespace HomeTask7.Repositories
 {
@@ -90,10 +91,9 @@ namespace HomeTask7.Repositories
 
                     Book book;
 
-                    if (entry.ContainsKey("AvailableFormat") && entry["AvailableFormat"].ValueKind == JsonValueKind.Array)
+                    if (!KeyValidator.CheckForIsbn(isbnRaw))
                     {
-                        var availableFormat = entry["AvailableFormat"].EnumerateArray().Select(formatNode => formatNode.GetString()).ToList();
-                        book = new EBook(title, authors, "UploadSourcePlaceholder", availableFormat);
+                        book = new EBook(title, authors, "UploadSourcePlaceholder", new List<string>());
                     }
                     else
                     {

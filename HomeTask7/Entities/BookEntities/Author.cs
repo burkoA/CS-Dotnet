@@ -1,4 +1,4 @@
-﻿namespace HomeTask7.Entities
+﻿namespace HomeTask7.Entities.BookEntities
 {
     public class Author
     {

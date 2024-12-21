@@ -1,49 +1,58 @@
-﻿using HomeTask7.Entities.BookType;
+﻿using HomeTask7.Entities.BookEntities;
+using HomeTask7.Entities.BookType;
 using HomeTask7.Utilities;
 
 namespace HomeTask7.Entities.AbstractFactory
 {
     public class PaperBookLibraryFactory : ILibraryFactory
     {
-        public Library CreateLibrary(string csvFilePath)
+        public List<string> CreatePressRelease()
         {
-            Library library = new Library();
+            var publishers = new HashSet<string>();
 
-            foreach (var line in File.ReadLines(csvFilePath).Skip(1)) // Skip the header row
+            foreach (var columns in CSVParses.ReadCsvLines())
             {
-                var columns = CSVParses.ParseCsvLine(line);
+                if (string.IsNullOrWhiteSpace(columns[5]))
+                    continue;
 
+                var publisher = columns[4].Trim().Trim('"');
+
+                if (!string.IsNullOrEmpty(publisher))
+                {
+                    publishers.Add(publisher);
+                }
+            }
+
+            return publishers.ToList();
+        }
+
+        public Catalog CreateCatalog()
+        {
+            Catalog catalog = new Catalog();
+
+            foreach (var columns in CSVParses.ReadCsvLines())
+            {
                 if (string.IsNullOrWhiteSpace(columns[5]))
                     continue;
 
                 var authors = AuthorUtils.ParseAuthors(columns[0]);
 
-                // Extract other fields
                 var publicationDate = DateTime.TryParse(columns[3].Trim(), out var date) ? date : (DateTime?)null;
-                var publisher = columns[4].Trim().Trim('"'); // Remove quotes
-                List<string> isbnList = new List<string>();
+                var publisher = columns[4].Trim().Trim('"');
+                List<string> isbnList = columns[5].Trim().Split(',').Select(id => id.Trim()).ToList();
 
-                foreach (var id in columns[5].Trim().Split(','))
-                {
-                    isbnList.Add(id.Trim());
-                }
-
-                string title = columns[6].Trim().Trim('"'); // Remove quotes
+                string title = columns[6].Trim().Trim('"');
 
                 var book = new PaperBook(title, authors, publicationDate, isbnList, publisher);
 
                 if (isbnList.Count > 0)
                 {
-                    library.AddBook(isbnList[0].Replace("urn:isbn:", ""), book);
-                }
-
-                if (!library.PressReleaseItems.Contains(publisher))
-                {
-                    library.AddPressReleaseItem(publisher);
+                    string primaryIsbn = isbnList[0].Replace("urn:isbn:", "");
+                    catalog.AddBook(primaryIsbn, book);
                 }
             }
 
-            return library;
+            return catalog;
         }
     }
 }

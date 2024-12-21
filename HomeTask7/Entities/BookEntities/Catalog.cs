@@ -1,23 +1,20 @@
-﻿using HomeTask7.Entities;
-using HomeTask7.Entities.BookType;
+﻿using HomeTask7.Entities.BookType;
 using HomeTask7.Utilities;
 
-namespace HomeTask7
+namespace HomeTask7.Entities.BookEntities
 {
-    public class Catalog 
+    public class Catalog
     {
         public Dictionary<string, Book> BooksCatalog { get; set; }
 
-        public Catalog() 
+        public Catalog()
         {
-             BooksCatalog = new Dictionary<string, Book>();
+            BooksCatalog = new Dictionary<string, Book>();
         }
 
         public Book GetBookByIsbn(string isbn)
         {
-            string normaliIsbn = Isbn.NormalizeISBN(isbn);
-
-            return BooksCatalog.TryGetValue(normaliIsbn, out Book book) ? book : null;
+            return BooksCatalog.TryGetValue(isbn, out Book book) ? book : null;
         }
 
         public void AddBook(string isbn, Book book)

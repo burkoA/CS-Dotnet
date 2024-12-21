@@ -1,4 +1,5 @@
 ﻿using HomeTask7.DALEntities;
+using HomeTask7.Entities.BookEntities;
 using HomeTask7.Interfaces;
 using System.Xml.Serialization;
 

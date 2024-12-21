@@ -1,47 +1,27 @@
-﻿using HomeTask7.Entities.BookType;
+﻿using HomeTask7.Entities.BookEntities;
+using HomeTask7.Entities.BookType;
 using HomeTask7.Utilities;
 
 namespace HomeTask7.Entities.AbstractFactory
 {
     public class EBookLibraryFactory : ILibraryFactory
     {
-        public Library CreateLibrary(string csvFilePath)
+        public Catalog CreateCatalog()
         {
-            var library = new Library();
+            var catalog = new Catalog();
 
-            foreach (var line in File.ReadLines(csvFilePath).Skip(1))
+            foreach (var columns in CSVParses.ReadCsvLines())
             {
-                // Use CSVParses to split the line into columns
-                var columns = CSVParses.ParseCsvLine(line);
-
-                // Extract title from the 6th column
                 var title = columns[6].Trim();
-
-                // Use AuthorUtils to parse author information
                 var authors = AuthorUtils.ParseAuthors(columns[0].Trim());
-
-                // Extract identifier from the 2nd column
                 var identifier = columns[2].Trim();
-
-                // Extract formats from the 1st column (comma-separated formats)
                 var formats = new List<string>(columns[1].Trim().Split(','));
 
-                // Create an eBook instance
                 var book = new EBook(title, authors, identifier, formats);
 
-                // Add the book to the library using the identifier as the key
-                if (!library.Catalog.BooksCatalog.ContainsKey(identifier))
+                if (!catalog.BooksCatalog.ContainsKey(identifier))
                 {
-                    library.AddBook(identifier, book);
-
-                    // Add new formats to press release items if not already present
-                    foreach (var format in formats)
-                    {
-                        if (!library.PressReleaseItems.Contains(format))
-                        {
-                            library.AddPressReleaseItem(format);
-                        }
-                    }
+                    catalog.AddBook(identifier, book);
                 }
                 else
                 {
@@ -49,7 +29,24 @@ namespace HomeTask7.Entities.AbstractFactory
                 }
             }
 
-            return library;
+            return catalog;
+        }
+
+        public List<string> CreatePressRelease()
+        {
+            var pressReleaseItems = new HashSet<string>();
+
+            foreach (var columns in CSVParses.ReadCsvLines())
+            {
+                var formats = columns[1].Trim().Split(',');
+
+                foreach (var format in formats)
+                {
+                    pressReleaseItems.Add(format.Trim());
+                }
+            }
+
+            return pressReleaseItems.ToList();
         }
     }
 }

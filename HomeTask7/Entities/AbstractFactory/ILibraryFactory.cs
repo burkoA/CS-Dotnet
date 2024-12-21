@@ -1,7 +1,10 @@
-﻿namespace HomeTask7.Entities.AbstractFactory
+﻿using HomeTask7.Entities.BookEntities;
+
+namespace HomeTask7.Entities.AbstractFactory
 {
     public interface ILibraryFactory
     {
-        Library CreateLibrary(string csvFilePath);
+        Catalog CreateCatalog();
+        List<string> CreatePressRelease();
     }
 }

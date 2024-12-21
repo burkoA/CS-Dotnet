@@ -1,4 +1,5 @@
-﻿using HomeTask7.Entities.BookType;
+﻿using HomeTask7.Entities.BookEntities;
+using HomeTask7.Entities.BookType;
 
 namespace HomeTask7.Entities
 {
