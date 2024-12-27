@@ -11,19 +11,18 @@ namespace HomeTask8.Utilities
 
         public static async Task InitializePagesAsync(Catalog catalog)
         {
-            var tasks = catalog.BooksCatalog.Values.OfType<EBook>().Select(book =>
-            {
-                return Task.Run(async () =>
+            var tasks = catalog.BooksCatalog.Values.OfType<EBook>()
+                .Select(book => Task.Run(async () =>
                 {
                     var url = $"https://archive.org/details/{book.IdOfUploadSource}";
                     book.Pages = await GetNumberOfPagesAsync(url);
-                });
-            }).ToArray();
+                }))
+                .ToArray();
 
             await Task.WhenAll(tasks);
         }
 
-        public static async Task<int> GetNumberOfPagesAsync(string url)
+        private static async Task<int> GetNumberOfPagesAsync(string url)
         {
             try
             {
